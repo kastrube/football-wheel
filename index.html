@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Dice Roll Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/gsap.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dice-container">
+        <div class="dice" id="dice1">
+            <div class="face front"><span>1</span></div>
+            <div class="face back"><span>6</span></div>
+            <div class="face left"><span>4</span></div>
+            <div class="face right"><span>3</span></div>
+            <div class="face top"><span>2</span></div>
+            <div class="face bottom"><span>5</span></div>
+        </div>
+        <div class="dice" id="dice2">
+            <div class="face front"><span>1</span></div>
+            <div class="face back"><span>6</span></div>
+            <div class="face left"><span>4</span></div>
+            <div class="face right"><span>3</span></div>
+            <div class="face top"><span>2</span></div>
+            <div class="face bottom"><span>5</span></div>
+        </div>
+    </div>
+    <button id="rollButton">Roll the Dice</button>
+    <div id="resultBox" class="result-box hidden">
+        <p id="resultText"></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
