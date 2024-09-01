@@ -3,50 +3,77 @@ const dice2 = document.getElementById('dice2');
 const rollButton = document.getElementById('rollButton');
 const resultBox = document.getElementById('resultBox');
 const resultText = document.getElementById('resultText');
-
 let rolling = false;
 
 const selections = [
     "Arizona", "Atlanta", "Baltimore", "Buffalo",
     "Carolina", "Cincinnati", "Chicago", "Cleveland", "Dallas",
     "Denver", "Detroit", "Houston", "Green Bay", "Indianapolis",
-    "Los Angeles (r)", "Jacksonville", "Minnesota", "Kansas City", "New Orleans",
-    "Las Vegas", "New York (g)", "Los Angeles (c)", "Philadelphia", "Miami",
-    "San Francisco", "New England", "Seattle", "New York (j)", "Tampa Bay",
+    "Los Angeles (R)", "Jacksonville", "Minnesota", "Kansas City", "New Orleans",
+    "Las Vegas", "New York (G)", "Los Angeles (C)", "Philadelphia", "Miami",
+    "San Francisco", "New England", "Seattle", "New York (J)", "Tampa Bay",
     "Pittsburgh", "Washington", "Tennessee"
 ];
 
-function rollDie(die, startX) {
+function getRandomRotation() {
+    return Math.floor(Math.random() * 4) * 90;
+}
+
+function rollDie(die) {
     const tl = gsap.timeline();
-    const dieSize = 50;
-    const rolls = Math.floor(Math.random() * 2) + 3;
-    let currentX = startX;
+    const throwForce = Math.random() * 500 + 300;
+    const throwRotationX = Math.random() * 1440 - 720;
+    const throwRotationY = Math.random() * 1440 - 720;
+    const throwRotationZ = Math.random() * 1440 - 720;
 
+    // Initial throw
     tl.to(die, {
-        duration: 0.6,
-        y: -450.0,
-        ease: "power1.out"
-    });
+        duration: 0.8,
+        x: `random(100, 200)`,  // Move right
+        y: -150,  // Arc upward
+        z: 100,   // Slight forward movement
+        rotationX: throwRotationX,
+        rotationY: throwRotationY,
+        rotationZ: throwRotationZ,
+        ease: "power2.out"
+    }).to(die, {
+        duration: 0.4,
+        y: 0,     // Fall back down
+        ease: "power2.in"
+    }, "-=0.2");  // Overlap slightly with the upward motion
 
-    for (let i = 0; i < rolls; i++) {
+    // Bounces
+    const bounces = Math.floor(Math.random() * 2) + 3;
+    for (let i = 0; i < bounces; i++) {
+        const bounceDuration = 0.2 - (i * 0.03);
+        const bounceHeight = 100 / (i + 1);
         tl.to(die, {
-            duration: 0.2,
-            x: currentX + dieSize,
-            rotation: -10.0,
-            ease: "power1.inOut"
+            duration: bounceDuration,
+            y: `-=${bounceHeight}`,
+            rotationX: `+=${Math.random() * 180 - 90}`,
+            rotationY: `+=${Math.random() * 180 - 90}`,
+            rotationZ: `+=${Math.random() * 180 - 90}`,
+            ease: "power1.out"
         });
-        currentX += dieSize;
+        tl.to(die, {
+            duration: bounceDuration,
+            y: 0,
+            ease: "bounce.out"
+        });
     }
 
-    const finalRotation = Math.floor(Math.random() * 4) * 90;
+    // Final settle
     tl.to(die, {
-        duration: 0.1,
-        rotation: finalRotation,
+        duration: 0.5,
+        x: 0,
         y: 0,
-        ease: "bounce.out"
+        rotationX: getRandomRotation(),
+        rotationY: getRandomRotation(),
+        rotationZ: getRandomRotation(),
+        ease: "power3.out"
     });
 
-    return { timeline: tl, finalX: currentX };
+    return tl;
 }
 
 function startRollingDice() {
@@ -54,31 +81,19 @@ function startRollingDice() {
         rolling = true;
         resultBox.classList.add('hidden');
 
-        const spacing = 20;
-        const die1StartX = 0;
-        const die2StartX = die1StartX + 50 + spacing;
-
-        gsap.set(dice1, { x: die1StartX, y: 0, rotation: 0 });
-        gsap.set(dice2, { x: die2StartX, y: 0, rotation: 0 });
-
         const masterTimeline = gsap.timeline({
             onComplete: () => {
                 rolling = false;
-                // Add a delay before showing the result
                 gsap.delayedCall(0.5, showResult);
             }
         });
 
-        const roll1 = rollDie(dice1, die1StartX);
-        const roll2 = rollDie(dice2, die2StartX);
+        // Reset dice positions
+        gsap.set([dice1, dice2], { x: -100, y: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0 });
 
-        masterTimeline.add(roll1.timeline, 0);
-        masterTimeline.add(roll2.timeline, 0.05);
-
-        masterTimeline.add(() => {
-            const finalSpacing = Math.max(roll1.finalX, roll2.finalX) + spacing;
-            gsap.to(dice2, { x: finalSpacing, duration: 0.4, ease: "power1.inOut" });
-        });
+        // Roll dice with a slight delay between them
+        masterTimeline.add(rollDie(dice1), 0);
+        masterTimeline.add(rollDie(dice2), 0.15);
     }
 }
 
