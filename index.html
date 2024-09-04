@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dice Roll Game</title>
+    <title>Dice and Wheel Game</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabbyjs@12.0.3/dist/css/tabby-ui.min.css">
 </head>
 <body>
-    <div id="sidebar" class="sidebar hidden">
-        <p><a href="#" id="diceTab">Dice</a></p>  <!-- Correct ID: "diceTab" -->
-        <p><a href="#" id="wheelTab">Wheel</a></p> <!-- Correct ID: "wheelTab" -->
-    </div>
-    <button id="tabButton" class="tab-button">☰</button>
-    <div class="game-container">
-        <div id="diceContainer" class="tab-content active">
-            <div class="dice-container">
-                <div id="dice1" class="dice">
+    <header>
+        <!-- Navigation button for sidebar -->
+        <button id="tabButton" class="tab-button" aria-label="Toggle Sidebar">☰</button>
+    </header>
+
+    <aside id="sidebar" class="sidebar hidden" aria-label="Game Tabs Navigation">
+        <ul data-tabs role="tablist">
+            <li><a href="#diceContainer" id="diceTab" data-tabby-default role="tab" aria-controls="diceContainer" aria-selected="true">Dice</a></li>
+            <li><a href="#wheelContainer" id="wheelTab" role="tab" aria-controls="wheelContainer">Wheel</a></li>
+        </ul>
+    </aside>
+
+    <main class="game-container" role="main">
+        <!-- Dice Section -->
+        <section id="diceContainer" class="tab-content" role="tabpanel" aria-labelledby="diceTab">
+            <div class="dice-container" aria-label="Dice Area">
+                <div id="dice1" class="dice" role="img" aria-label="Dice 1 showing number 1">
                     <div class="face front">1</div>
                     <div class="face back">6</div>
                     <div class="face left">4</div>
@@ -23,7 +32,7 @@
                     <div class="face top">2</div>
                     <div class="face bottom">5</div>
                 </div>
-                <div id="dice2" class="dice">
+                <div id="dice2" class="dice" role="img" aria-label="Dice 2 showing number 1">
                     <div class="face front">1</div>
                     <div class="face back">6</div>
                     <div class="face left">4</div>
@@ -32,54 +41,46 @@
                     <div class="face bottom">5</div>
                 </div>
             </div>
-            <button id="rollButton">Roll the Dice</button>
-            <div id="resultBox" class="result-box hidden">
+            <button id="rollButton" class="game-button" aria-label="Roll the Dice">Roll the Dice</button>
+            <div id="resultBox" class="result-box hidden" aria-live="polite">
                 <p id="resultText"></p>
             </div>
-        </div>
-    </div>
-    <div id="wheelContainer" class="tab-content hidden">
-        <svg id="wheelSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
-            <!-- Outer circle for the wheel -->
-            <circle cx="250" cy="250" r="240" fill="#f2f2f2" stroke="#61dafb" stroke-width="20"/>
             
-            <!-- Wheel Segments -->
-            <g id="wheelSegments">
-                <!-- Segment 1 -->
-                <path d="M250,250 L250,10 A240,240 0 0,1 437,90 z" fill="#FF6347"/>
-                <!-- Segment 2 -->
-                <path d="M250,250 L437,90 A240,240 0 0,1 490,250 z" fill="#FFD700"/>
-                <!-- Segment 3 -->
-                <path d="M250,250 L490,250 A240,240 0 0,1 437,410 z" fill="#32CD32"/>
-                <!-- Segment 4 -->
-                <path d="M250,250 L437,410 A240,240 0 0,1 250,490 z" fill="#1E90FF"/>
-                <!-- Segment 5 -->
-                <path d="M250,250 L250,490 A240,240 0 0,1 63,410 z" fill="#FF69B4"/>
-                <!-- Segment 6 -->
-                <path d="M250,250 L63,410 A240,240 0 0,1 10,250 z" fill="#BA55D3"/>
-                <!-- Segment 7 -->
-                <path d="M250,250 L10,250 A240,240 0 0,1 63,90 z" fill="#FF8C00"/>
-                <!-- Segment 8 -->
-                <path d="M250,250 L63,90 A240,240 0 0,1 250,10 z" fill="#8A2BE2"/>
-            </g>
-    
-            <!-- Wheel center -->
-            <circle cx="250" cy="250" r="30" fill="#282c34"/>
-        </svg>
-        <button id="spinButton">Spin the Wheel</button>
-    </div>
-</div>>
-    
+            </div>
+        </section>
 
-    <!-- Move the Read Me section outside the .game-container div -->
-    <div class="readme-section">
+        <!-- Wheel Section -->
+        <section id="wheelContainer" class="tab-content" role="tabpanel" aria-labelledby="wheelTab">
+            <svg id="wheelSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" role="img" aria-label="Spinning wheel with 8 colored sections">
+                <circle cx="250" cy="250" r="240" fill="#f2f2f2" stroke="#61dafb" stroke-width="20"/>
+                <g id="wheelSegments">
+                    <path d="M250,250 L250,10 A240,240 0 0,1 437,90 z" fill="#FF6347"/>
+                    <path d="M250,250 L437,90 A240,240 0 0,1 490,250 z" fill="#FFD700"/>
+                    <path d="M250,250 L490,250 A240,240 0 0,1 437,410 z" fill="#32CD32"/>
+                    <path d="M250,250 L437,410 A240,240 0 0,1 250,490 z" fill="#1E90FF"/>
+                    <path d="M250,250 L250,490 A240,240 0 0,1 63,410 z" fill="#FF69B4"/>
+                    <path d="M250,250 L63,410 A240,240 0 0,1 10,250 z" fill="#BA55D3"/>
+                    <path d="M250,250 L10,250 A240,240 0 0,1 63,90 z" fill="#FF8C00"/>
+                    <path d="M250,250 L63,90 A240,240 0 0,1 250,10 z" fill="#8A2BE2"/>
+                </g>
+                <circle cx="250" cy="250" r="30" fill="#282c34"/>
+            </svg>
+            <button id="spinButton" aria-label="Spin the Wheel">Spin the Wheel</button>
+            <div id="wheelResultBox" class="result-box" aria-live="polite">
+                <span id="wheelResultText"></span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="readme-section" role="contentinfo">
         <h2>Read Me</h2>
         <h3>Contact Me</h3>
         <h4>Learn More</h4>
-        <!-- Add more content as needed -->
-    </div>
+    </footer>
 
+    <!-- External JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tabbyjs@12.0.3/dist/js/tabby.min.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
