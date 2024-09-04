@@ -3,33 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Dice Roll Animation</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/gsap.min.js"></script>
+    <title>Dice Roll Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="dice-container">
-        <div class="dice" id="dice1">
-            <div class="face front"><span>1</span></div>
-            <div class="face back"><span>6</span></div>
-            <div class="face left"><span>4</span></div>
-            <div class="face right"><span>3</span></div>
-            <div class="face top"><span>2</span></div>
-            <div class="face bottom"><span>5</span></div>
-        </div>
-        <div class="dice" id="dice2">
-            <div class="face front"><span>1</span></div>
-            <div class="face back"><span>6</span></div>
-            <div class="face left"><span>4</span></div>
-            <div class="face right"><span>3</span></div>
-            <div class="face top"><span>2</span></div>
-            <div class="face bottom"><span>5</span></div>
+    <div id="sidebar" class="sidebar hidden">
+        <p><a href="#" id="diceTab">Dice</a></p>  <!-- Correct ID: "diceTab" -->
+        <p><a href="#" id="wheelTab">Wheel</a></p> <!-- Correct ID: "wheelTab" -->
+    </div>
+    <button id="tabButton" class="tab-button">☰</button>
+    <div class="game-container">
+        <div id="diceContainer" class="tab-content active">
+            <div class="dice-container">
+                <div id="dice1" class="dice">
+                    <div class="face front">1</div>
+                    <div class="face back">6</div>
+                    <div class="face left">4</div>
+                    <div class="face right">3</div>
+                    <div class="face top">2</div>
+                    <div class="face bottom">5</div>
+                </div>
+                <div id="dice2" class="dice">
+                    <div class="face front">1</div>
+                    <div class="face back">6</div>
+                    <div class="face left">4</div>
+                    <div class="face right">3</div>
+                    <div class="face top">2</div>
+                    <div class="face bottom">5</div>
+                </div>
+            </div>
+            <button id="rollButton">Roll the Dice</button>
+            <div id="resultBox" class="result-box hidden">
+                <p id="resultText"></p>
+            </div>
         </div>
     </div>
-    <button id="rollButton">Roll the Dice</button>
-    <div id="resultBox" class="result-box hidden">
-        <p id="resultText"></p>
+    <div id="wheelContainer" class="tab-content hidden">
+        <svg id="wheelSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+            <!-- Outer circle for the wheel -->
+            <circle cx="250" cy="250" r="240" fill="#f2f2f2" stroke="#61dafb" stroke-width="20"/>
+            
+            <!-- Wheel Segments -->
+            <g id="wheelSegments">
+                <!-- Segment 1 -->
+                <path d="M250,250 L250,10 A240,240 0 0,1 437,90 z" fill="#FF6347"/>
+                <!-- Segment 2 -->
+                <path d="M250,250 L437,90 A240,240 0 0,1 490,250 z" fill="#FFD700"/>
+                <!-- Segment 3 -->
+                <path d="M250,250 L490,250 A240,240 0 0,1 437,410 z" fill="#32CD32"/>
+                <!-- Segment 4 -->
+                <path d="M250,250 L437,410 A240,240 0 0,1 250,490 z" fill="#1E90FF"/>
+                <!-- Segment 5 -->
+                <path d="M250,250 L250,490 A240,240 0 0,1 63,410 z" fill="#FF69B4"/>
+                <!-- Segment 6 -->
+                <path d="M250,250 L63,410 A240,240 0 0,1 10,250 z" fill="#BA55D3"/>
+                <!-- Segment 7 -->
+                <path d="M250,250 L10,250 A240,240 0 0,1 63,90 z" fill="#FF8C00"/>
+                <!-- Segment 8 -->
+                <path d="M250,250 L63,90 A240,240 0 0,1 250,10 z" fill="#8A2BE2"/>
+            </g>
+    
+            <!-- Wheel center -->
+            <circle cx="250" cy="250" r="30" fill="#282c34"/>
+        </svg>
+        <button id="spinButton">Spin the Wheel</button>
     </div>
+</div>>
+    
+
+    <!-- Move the Read Me section outside the .game-container div -->
+    <div class="readme-section">
+        <h2>Read Me</h2>
+        <h3>Contact Me</h3>
+        <h4>Learn More</h4>
+        <!-- Add more content as needed -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
