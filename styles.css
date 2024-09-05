@@ -89,15 +89,14 @@ body {
 .bottom { transform: rotateX(-90deg) translateZ(50px); }
 
 /* Wheel Styles */
-#wheelContainer {
+.wheel-container {
   display: flex; /* Enables flexbox layout */
-  justify-content: center; /* Centers dice horizontally */
-  align-items: center; /* Centers dice vertically (optional) */
+  justify-content: center; /* Centers wheel horizontally */
+  align-items: center; /* Centers wheel vertically */
+  width: 100%;
+  height: 100vh;  /* Ensures full vertical height for proper centering */
   margin-bottom: 20px;
-  position: relative;
-  width: 100%; /* Ensures it takes full width for proper centering */
-  height: 100vh; /* Ensures it takes the full height for vertical centering (optional) */
-  box-sizing: border-box; /* Makes sure padding doesn't affect size */
+  box-sizing: border-box;
 }
 
 #wheelSVG {
@@ -105,29 +104,24 @@ body {
   max-width: 400px;
   height: auto;
   display: block;
-  margin-top: 100px; /* Adjust this value to move the wheel down */
+  margin-top: 0;  /* Adjust this value if necessary */
 }
 
 /* Game Button Styles */
-#rollButton {
+.game-button {
   display: block;
-  position: relative;
-  margin-top: 20px;  /* Added space below the dice */
+  margin-top: 20px;
   padding: var(--button-padding);
   font-size: var(--font-size);
-  cursor: pointer;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   border: none;
   border-radius: var(--button-border-radius);
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s, box-shadow 0.3s;
-  width: auto;
-  text-align: center;
 }
 
-/* Roll button hover effect */
-#rollButton:hover {
+.game-button:hover {
   transform: scale(1.05);
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
 }
@@ -235,38 +229,12 @@ body {
   display: none;
 }
 
-/* Read Me Section */
-.readme-section {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 50px;
-  height: 50px;
-  background-color: #1e2128;
-  z-index: 10;
-  border-radius: 5px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.readme-section:hover {
-  width: 300px;
-  height: 200px;
-}
-
-.readme-section:hover h2,
-.readme-section:hover h3,
-.readme-section:hover h4 {
-  display: block;
-  padding: 10px;
-}
-
 /* Final Result Box */
 #finalResultBox {
-  position: fixed; /* Keep this for positioning relative to the viewport */
+  position: fixed;
   top: 100px; /* Adjust for Y-axis positioning as needed */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust for true centering */
+  left: 50%;
+  transform: translateX(-50%);
   padding: var(--button-padding);
   background-color: var(--primary-color);
   color: var(--secondary-color);
@@ -289,10 +257,10 @@ body {
   justify-content: center;
   align-items: center; /* Ensure vertical centering if needed */
   margin-bottom: 20px;
-  position: fixed; /* Position it relative to the viewport */
+  position: fixed;
   top: 50px; /* Adjust Y-axis as needed */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust for true centering */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .previous-result {

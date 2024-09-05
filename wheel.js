@@ -1,9 +1,4 @@
-// wheel.js
-
-// Constants for wheel spin logic
-const MIN_FULL_ROTATIONS = 7;
-const MAX_EXTRA_ROTATION = 360;
-const SPIN_DURATION = 3; // In seconds
+let wheelRollCount = 0; // Track the number of wheel spins
 
 // DOM elements for wheel game
 const spinButton = document.getElementById('spinButton');
@@ -11,8 +6,8 @@ const wheelSVG = document.getElementById('wheelSVG');
 const wheelResultBox = document.getElementById('wheelResultBox');
 const wheelResultText = document.getElementById('wheelResultText');
 
-// Wheel options
-import { selections } from './dice.js';
+// Wheel options (assuming a similar array like in the dice game)
+const selections = ["Result 1", "Result 2", "Result 3", "Result 4", "Result 5", "Result 6", "Result 7", "Result 8"];
 
 // Initialize wheel game
 export function initializeWheelGame() {
@@ -24,17 +19,65 @@ export function initializeWheelGame() {
     spinButton.addEventListener('click', spinWheel);
 }
 
-// Spin the wheel when button is clicked
+// Show the wheel result after spinning
+function showWheelResult() {
+    const randomSelection = selections[Math.floor(Math.random() * selections.length)];
+
+    // Increment the roll count
+    wheelRollCount++;
+
+    // Show results for the first three spins
+    if (wheelRollCount <= 3) {
+        document.getElementById(`previousResult${wheelRollCount}`).textContent = randomSelection;
+    } 
+    
+    // On the 4th spin, show the final result and hide the previous results
+    else {
+        const finalResultText = document.getElementById('finalResultText');
+        const finalResultBox = document.getElementById('finalResultBox');
+        finalResultText.textContent = randomSelection;
+        finalResultBox.classList.remove('hidden');
+        finalResultBox.classList.add('active');
+
+        // Hide the first three result boxes after the 4th spin
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(`previousResult${i}`).style.display = 'none';
+        }
+
+        // Reset the roll count for the next round
+        wheelRollCount = 0;
+    }
+
+    // Show the spin button again for the next spin
+    spinButton.textContent = "Spin Again";
+    spinButton.disabled = false; // Re-enable the button after the spin completes
+}
+
+// Spin the wheel when the button is clicked
 function spinWheel() {
+    // Reset the game after the 4th spin when "Spin Again" is clicked
+    if (wheelRollCount === 0) {
+        // Clear the previous results
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(`previousResult${i}`).textContent = '';
+            document.getElementById(`previousResult${i}`).style.display = 'block'; // Make the result boxes visible again
+        }
+
+        // Hide the final result box
+        const finalResultBox = document.getElementById('finalResultBox');
+        finalResultBox.classList.remove('active');
+        finalResultBox.classList.add('hidden');
+    }
+
     if (document.getElementById('wheelContainer').classList.contains('active')) {
         resetWheelRotation();
 
-        const fullRotations = Math.floor(Math.random() * 10) + MIN_FULL_ROTATIONS; 
-        const randomRotation = Math.floor(Math.random() * MAX_EXTRA_ROTATION); 
+        const fullRotations = Math.floor(Math.random() * 10) + 7; 
+        const randomRotation = Math.floor(Math.random() * 360); 
         const totalRotation = (fullRotations * 360) + randomRotation;
 
-        // Animate wheel spin
-        wheelSVG.style.transition = `transform ${SPIN_DURATION}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+        // Animate the wheel spin
+        wheelSVG.style.transition = `transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)`;
         wheelSVG.style.transform = `rotate(${totalRotation}deg)`;
 
         // Disable spin button during the spin
@@ -42,11 +85,8 @@ function spinWheel() {
 
         // After spin completes, show result and re-enable the button
         setTimeout(() => {
-            const finalRotation = totalRotation % 360;
-            console.log(`Wheel stopped at ${finalRotation} degrees`);
             showWheelResult();
-            spinButton.disabled = false; // Re-enable the button after the spin completes
-        }, SPIN_DURATION * 1000); // Spin duration in milliseconds
+        }, 3000); // Spin duration in milliseconds
     }
 }
 
@@ -56,40 +96,3 @@ function resetWheelRotation() {
     wheelSVG.style.transform = 'rotate(0deg)';
     wheelSVG.offsetHeight; // Force browser reflow
 }
-
-let wheelRollCount = 0; // Keep track of how many times the wheel has been spun
-
-// Show the wheel result
-function showWheelResult() {
-    const randomSelection = selections[Math.floor(Math.random() * selections.length)];
-    
-    // Increment the roll count
-    wheelRollCount++;
-
-    if (wheelRollCount <= 3) {
-        // Show results in the first three result boxes
-        document.getElementById(`previousResult${wheelRollCount}`).textContent = randomSelection;
-    } else {
-        // On the fourth roll, show the result in the final result box
-        const finalResultText = document.getElementById('finalResultText');
-        const finalResultBox = document.getElementById('finalResultBox');
-        finalResultText.textContent = randomSelection;
-        finalResultBox.classList.remove('hidden');
-        finalResultBox.classList.add('active');
-
-        // Animate the final result box
-        gsap.fromTo(finalResultBox, 
-            { opacity: 0, y: 20 }, 
-            { duration: 0.5, opacity: 1, y: 0, ease: "power2.out" }
-        );
-    }
-    
-    // Update the main result box
-    wheelResultBox.classList.remove('hidden');
-    wheelResultBox.classList.add('active');
-    gsap.fromTo(wheelResultBox, 
-        { opacity: 0, y: 20 }, 
-        { duration: 0.5, opacity: 1, y: 0, ease: "power2.out" }
-    );
-}
-
