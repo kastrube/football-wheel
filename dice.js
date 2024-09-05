@@ -21,14 +21,12 @@ export const selections = [
 const dice1 = document.getElementById('dice1');
 const dice2 = document.getElementById('dice2');
 const rollButton = document.getElementById('rollButton');
-const resultBox = document.getElementById('resultBox');
-const resultText = document.getElementById('resultText');
 
 let rolling = false; // State flag
 
 // Roll the dice when the button is clicked
 export function initializeDiceGame() {
-    if (!dice1 || !dice2 || !rollButton || !resultBox || !resultText) {
+    if (!dice1 || !dice2 || !rollButton) {
         console.error("Missing dice elements in DOM.");
         return;
     }
@@ -89,11 +87,27 @@ function rollDie(die, index) {
 
 // Start rolling dice
 function startRollingDice() {
+    // Reset the game after the 4th roll when "Roll Again" is clicked
+    if (rollCount === 0) {
+        // Clear the previous results
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(`previousResult${i}`).textContent = '';
+            document.getElementById(`previousResult${i}`).style.display = 'block';  // Make the result boxes visible again
+        }
+
+        // Hide the final result box
+        const finalResultBox = document.getElementById('finalResultBox');
+        finalResultBox.classList.remove('active');
+        finalResultBox.classList.add('hidden');
+    }
+
     if (!rolling && document.getElementById('diceContainer').classList.contains('active')) {
         rolling = true;
-        rollButton.style.display = 'none';  // Hide the roll button
-        resultBox.classList.add('hidden');  // Hide result box while rolling
 
+        // Hide the roll button while rolling
+        rollButton.style.display = 'none';
+
+        // Reset the dice positions before rolling
         gsap.set([dice1, dice2], {
             x: -150,
             y: -150,
@@ -105,31 +119,20 @@ function startRollingDice() {
         const masterTimeline = gsap.timeline({
             onComplete: () => {
                 rolling = false;
-                showResult();  // Show result after dice roll finishes
+                showResult();  // Show the result after dice roll completes
             }
         });
 
+        // Start the dice rolling animation
         masterTimeline.add(rollDie(dice1, 0), 0);
         masterTimeline.add(rollDie(dice2, 1), 0.2);
     }
 }
 
-// Show the result after dice roll
-function showResult() {
-    const randomSelection = selections[Math.floor(Math.random() * selections.length)];
-    resultText.textContent = randomSelection;
-    
-    resultBox.classList.remove('hidden');  // Make result box visible by removing hidden class
-    resultBox.classList.add('active');     // Add active class for smooth fade-in
-    
-    gsap.fromTo(resultBox,
-        { opacity: 0, y: 20 },             // Start animation state
-        { duration: 0.5, opacity: 1, y: 0, ease: "power2.out" }  // End animation
-    );
 
-    rollButton.textContent = "Roll Again"; // Update button text
-    rollButton.style.display = 'block';    // Make Roll Again button visible
-}
+
+// Show the result after dice roll
+
 
 
 
@@ -144,3 +147,43 @@ function initializeDice() {
         transformPerspective: 600
     });
 }
+
+let lastThreeResults = [];
+
+// Show the result after dice roll
+let rollCount = 0; // Track the number of rolls
+
+function showResult() {
+    const randomSelection = selections[Math.floor(Math.random() * selections.length)];
+    
+    // Increment the roll count
+    rollCount++;
+
+    // Show the results for the first three rolls
+    if (rollCount <= 3) {
+        document.getElementById(`previousResult${rollCount}`).textContent = randomSelection;
+    } 
+    
+    // On the 4th roll, show the final result and hide the previous results
+    else {
+        const finalResultText = document.getElementById('finalResultText');
+        const finalResultBox = document.getElementById('finalResultBox');
+        finalResultText.textContent = randomSelection;
+        finalResultBox.classList.remove('hidden');
+        finalResultBox.classList.add('active');
+
+        // Hide the first three result boxes
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(`previousResult${i}`).style.display = 'none';
+        }
+
+        // Reset roll count for the next round
+        rollCount = 0;
+    }
+
+    // Show the roll button again for the next roll
+    rollButton.textContent = "Roll Again";
+    rollButton.style.display = 'block';
+}
+
+

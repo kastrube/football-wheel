@@ -17,6 +17,7 @@ body {
   color: var(--primary-color);
 }
 
+/* Game container */
 .game-container {
   padding-bottom: 200px;  /* Adjust based on Read Me section height */
   display: flex;
@@ -46,17 +47,20 @@ body {
 
 /* Dice Styles */
 .dice-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* Enables flexbox layout */
+  justify-content: center; /* Centers dice horizontally */
+  align-items: center; /* Centers dice vertically (optional) */
   margin-bottom: 20px;
   position: relative;
+  width: 100%; /* Ensures it takes full width for proper centering */
+  height: auto; /* Adjusted to ensure space for button and results */
+  box-sizing: border-box; /* Makes sure padding doesn't affect size */
 }
 
 .dice {
   width: 100px;
   height: 100px;
-  position: relative;
+  margin: 10px; /* Adds spacing between dice */
   transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
@@ -86,9 +90,14 @@ body {
 
 /* Wheel Styles */
 #wheelContainer {
-  max-width: 500px;
-  width: 80%;
-  height: auto;
+  display: flex; /* Enables flexbox layout */
+  justify-content: center; /* Centers dice horizontally */
+  align-items: center; /* Centers dice vertically (optional) */
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%; /* Ensures it takes full width for proper centering */
+  height: 100vh; /* Ensures it takes the full height for vertical centering (optional) */
+  box-sizing: border-box; /* Makes sure padding doesn't affect size */
 }
 
 #wheelSVG {
@@ -96,13 +105,14 @@ body {
   max-width: 400px;
   height: auto;
   display: block;
+  margin-top: 100px; /* Adjust this value to move the wheel down */
 }
 
 /* Game Button Styles */
-.game-button {
-  position: fixed;
-  top: 470px; /* Adjust this value for vertical position */
-  left: 49%;
+#rollButton {
+  display: block;
+  position: relative;
+  margin-top: 20px;  /* Added space below the dice */
   padding: var(--button-padding);
   font-size: var(--font-size);
   cursor: pointer;
@@ -110,44 +120,34 @@ body {
   color: var(--secondary-color);
   border: none;
   border-radius: var(--button-border-radius);
-  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s, box-shadow 0.3s;
-  margin: 10px 0;
+  width: auto;
+  text-align: center;
 }
 
-.game-button:hover {
-  transform: scale(var(--hover-scale));
+/* Roll button hover effect */
+#rollButton:hover {
+  transform: scale(1.05);
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
 }
 
-.game-button:active {
-  transform: scale(1);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-/* Result Box */
-.result-box {
-  position: absolute;
-  top: 50px;  /* Adjust as needed */
-  left: 20%;
-  transform: translateX(-50%);
-  padding: var(--button-padding);
-  font-size: var(--font-size);
+/* Results Box Styling */
+#resultBox {
+  display: block;
+  margin-top: 20px;
+  padding: 15px;
   background-color: var(--primary-color);
   color: var(--secondary-color);
-  border-radius: var(--button-border-radius);
-  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
-  height: 50px;
-  visibility: hidden;  /* Initially hidden */
-  opacity: 0;  /* Hidden by default with opacity for animation */
-  transition: opacity 0.3s ease-in-out;  /* Smooth transition */
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  visibility: visible;
 }
 
-.result-box.active {
-  visibility: visible;  /* Show the result box */
-  opacity: 1;  /* Make it fully visible */
+/* Hidden class, to hide initially */
+.hidden {
+  display: none;
 }
-
 
 /* Sidebar Styles */
 .sidebar {
@@ -259,4 +259,49 @@ body {
 .readme-section:hover h4 {
   display: block;
   padding: 10px;
+}
+
+/* Final Result Box */
+#finalResultBox {
+  position: fixed; /* Keep this for positioning relative to the viewport */
+  top: 100px; /* Adjust for Y-axis positioning as needed */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for true centering */
+  padding: var(--button-padding);
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: var(--button-border-radius);
+  font-size: var(--font-size);
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#finalResultBox.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Previous Results */
+#previousResults {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Ensure vertical centering if needed */
+  margin-bottom: 20px;
+  position: fixed; /* Position it relative to the viewport */
+  top: 50px; /* Adjust Y-axis as needed */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for true centering */
+}
+
+.previous-result {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0 5px;
+  font-size: var(--font-size);
+  text-align: center;
+  min-width: 100px;
 }

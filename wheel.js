@@ -57,13 +57,38 @@ function resetWheelRotation() {
     wheelSVG.offsetHeight; // Force browser reflow
 }
 
+let wheelRollCount = 0; // Keep track of how many times the wheel has been spun
+
 // Show the wheel result
 function showWheelResult() {
     const randomSelection = selections[Math.floor(Math.random() * selections.length)];
-    wheelResultText.textContent = randomSelection;
-    wheelResultBox.style.display = 'block';
-    gsap.fromTo(wheelResultBox,
-        { opacity: 0, y: 20 },
+    
+    // Increment the roll count
+    wheelRollCount++;
+
+    if (wheelRollCount <= 3) {
+        // Show results in the first three result boxes
+        document.getElementById(`previousResult${wheelRollCount}`).textContent = randomSelection;
+    } else {
+        // On the fourth roll, show the result in the final result box
+        const finalResultText = document.getElementById('finalResultText');
+        const finalResultBox = document.getElementById('finalResultBox');
+        finalResultText.textContent = randomSelection;
+        finalResultBox.classList.remove('hidden');
+        finalResultBox.classList.add('active');
+
+        // Animate the final result box
+        gsap.fromTo(finalResultBox, 
+            { opacity: 0, y: 20 }, 
+            { duration: 0.5, opacity: 1, y: 0, ease: "power2.out" }
+        );
+    }
+    
+    // Update the main result box
+    wheelResultBox.classList.remove('hidden');
+    wheelResultBox.classList.add('active');
+    gsap.fromTo(wheelResultBox, 
+        { opacity: 0, y: 20 }, 
         { duration: 0.5, opacity: 1, y: 0, ease: "power2.out" }
     );
 }
